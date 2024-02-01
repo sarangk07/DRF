@@ -4,21 +4,41 @@ from django.contrib.auth.models import User
 
 
 
+
+#validators
+def starts_with_capital(value):
+    if value['0'].lower():
+        raise serializers.ValidationError("name starts with capital letter")
+
 class RegisterSerializer(serializers.Serializer):
-    username = serializers.CharField()
+    username = serializers.CharField(max_length=100,validators=[starts_with_capital])
     email = serializers.EmailField()
     password = serializers.CharField()
     
-    def validate(self,data):
-        
+    
+    #field level Validation
+    def validate_username(self,value):
+        if value['0'].lower():
+            raise serializers.ValidationError("name starts with capital letter") 
+        return value    
+    
+    
+    #object level Validation
+    def validate(self,data): 
         if data['username']:
             if User.objects.filter(username = data['username']).exists():
                 raise serializers.ValidationError('username is already taken')
         if data['email']:
             if User.objects.filter(username = data['email']).exists():
                 raise serializers.ValidationError('email is already taken')
-        
         return data
+    
+    
+    
+    
+    
+    
+    
     
     def create(self,validated_data):
         print(validated_data)

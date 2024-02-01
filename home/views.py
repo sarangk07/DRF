@@ -175,12 +175,15 @@ def person(request):
             return Response(serializer.data)
         return Response(serializer.errors)
     
-    
     elif request.method == 'PATCH':
         #PATCH support partical update
         data = request.data
         obj = Person.objects.get(id = data['id'])
         serializer = PeopleSerializer(obj, data=data , partial=True)
+        
+        #obj = old data from database,  data=new data from the server, partial = supports partial updates
+        
+        
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data)

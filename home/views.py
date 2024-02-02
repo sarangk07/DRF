@@ -9,6 +9,7 @@ from django.contrib.auth import authenticate
 from rest_framework.authtoken.models import Token
 from rest_framework.decorators import action
 from django.core.paginator import Paginator
+from rest_framework.authentication import TokenAuthentication
 
 
 class RegisterAPI(APIView):
@@ -194,6 +195,7 @@ def person(request):
         obj = Person.objects.get(id = data['id'])
         obj.delete()
         return Response({"message" : 'person deleted!'})
+
 
 
 
